@@ -5,9 +5,7 @@ FROM php:8.2.12-apache
 RUN apt-get update && \
     apt-get install -y \
     libzip-dev \
-    zip \
-    git \
-    unzip
+    zip
 
 # Enable mod_rewrite
 RUN a2enmod rewrite
@@ -20,22 +18,18 @@ ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
-# Set the working directory to where the application will be located
+# Copy the application code
+COPY . /var/www/html
+
+# Set the working directory
 WORKDIR /var/www/html
 
-# Copy composer.json and composer.lock if it exists from LaravelMavericksFront to the working directory
-COPY LaravelMavericksFront/composer.json ./
-# Check if the composer.lock file exists before trying to copy it
-COPY LaravelMavericksFront/composer.lock ./  # Optional, only if you have this file
-
-# Install Composer globally
+# Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Install project dependencies
-RUN composer install --prefer-dist --no-progress --no-interaction
+RUN composer install --prefer-dist --no-progress --no-interaction --verbose
 
-# Copy the rest of the application code from LaravelMavericksFront to the working directory
-COPY LaravelMavericksFront/ ./
-
-# Set permissions for storage and bootstrap cache
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+# Set permissions for storage, bootstrap cache, and .env file
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/.env
+RUN chmod 644 /var/www/html/.env

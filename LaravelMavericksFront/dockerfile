@@ -25,6 +25,7 @@ WORKDIR /var/www/html
 
 # Copy composer.json and composer.lock if it exists from LaravelMavericksFront to the working directory
 COPY LaravelMavericksFront/composer.json ./
+# Check if the composer.lock file exists before trying to copy it
 COPY LaravelMavericksFront/composer.lock ./  # Optional, only if you have this file
 
 # Install Composer globally

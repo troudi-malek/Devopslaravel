@@ -18,7 +18,7 @@ services:
       dockerfile: dockerfile  
     container_name: laravelimage
     ports:
-      - "8080:80"
+      - "8081:80"
     environment:
       DB_CONNECTION: mysql
       DB_HOST: mysql-standalone

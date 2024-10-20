@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  # MySQL container
+  mysql-standalone:
+    image: mysql:latest
+    container_name: mysql-standalone
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=TestDocker
+    ports:
+      - 3306:3306
+
+  # Laravel app container
+  laravel-docker-container:
+    build:
+      context: ./  
+      dockerfile: dockerfile  
+    container_name: laravelimage
+    ports:
+      - "8080:80"
+    environment:
+      DB_CONNECTION: mysql
+      DB_HOST: mysql-standalone
+      DB_PORT: 3306
+      DB_DATABASE: TestDocker
+      DB_USERNAME: root
+      DB_PASSWORD:
+    depends_on:
+      - mysql-standalone
+    volumes:
+      - .:/var/www/html

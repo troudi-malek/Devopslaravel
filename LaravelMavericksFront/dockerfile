@@ -32,5 +32,6 @@ RUN composer install --prefer-dist --no-progress --no-interaction --verbose
 
 # Set permissions for storage, bootstrap cache, and .env file
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/.env
-RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+sudo chmod o+w ./storage/ -R
+sudo chown www-data:www-data -R ./storage
 RUN chmod 644 /var/www/html/.env

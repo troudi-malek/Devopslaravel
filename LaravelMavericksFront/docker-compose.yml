@@ -25,7 +25,7 @@ services:
       DB_PORT: 3306
       DB_DATABASE: TestDocker
       DB_USERNAME: root
-      DB_PASSWORD:
+      DB_PASSWORD: root
     depends_on:
       - mysql-standalone
     volumes:
